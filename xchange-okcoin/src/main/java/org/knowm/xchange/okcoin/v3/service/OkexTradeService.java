@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
 import org.knowm.xchange.dto.trade.LimitOrder;
@@ -19,6 +21,8 @@ import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.okcoin.OkexAdaptersV3;
 import org.knowm.xchange.okcoin.OkexExchangeV3;
+import org.knowm.xchange.okcoin.dto.trade.OkCoinOrder;
+import org.knowm.xchange.okcoin.dto.trade.OkCoinOrderResult;
 import org.knowm.xchange.okcoin.v3.dto.trade.OkexOpenOrder;
 import org.knowm.xchange.okcoin.v3.dto.trade.OkexOrderFlags;
 import org.knowm.xchange.okcoin.v3.dto.trade.OkexTradeHistoryParams;
@@ -35,9 +39,7 @@ import org.knowm.xchange.service.trade.params.CancelOrderByIdParams;
 import org.knowm.xchange.service.trade.params.CancelOrderParams;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamCurrencyPair;
 import org.knowm.xchange.service.trade.params.TradeHistoryParams;
-import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair;
-import org.knowm.xchange.service.trade.params.orders.OpenOrdersParamCurrencyPair;
-import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
+import org.knowm.xchange.service.trade.params.orders.*;
 
 public class OkexTradeService extends OkexTradeServiceRaw implements TradeService {
 
@@ -353,5 +355,31 @@ public class OkexTradeService extends OkexTradeServiceRaw implements TradeServic
       }
     } while (!stop);
     return all;
+  }
+
+  @Override
+  public Collection<Order> getOrder(OrderQueryParams... params) throws ExchangeException {
+    try {
+      Collection<Order> orders = new ArrayList<>();
+      for (OrderQueryParams param : params) {
+        if (!(param instanceof OrderQueryParamCurrencyPair)) {
+          throw new ExchangeException(
+                  "Parameters must be an instance of OrderQueryParamCurrencyPair");
+        }
+        OrderQueryParamCurrencyPair orderQueryParamCurrencyPair =
+                (OrderQueryParamCurrencyPair) param;
+        if (orderQueryParamCurrencyPair.getCurrencyPair() == null
+                || orderQueryParamCurrencyPair.getOrderId() == null) {
+          throw new ExchangeException(
+                  "You need to provide the currency pair and the order id to query an order.");
+        }
+        OkexOpenOrder result =  getSpotOrderDetails(orderQueryParamCurrencyPair.getOrderId(),OkexAdaptersV3.toSpotInstrument(orderQueryParamCurrencyPair.getCurrencyPair()));
+        Order order =  OkexAdaptersV3.adaptOkCoinOrder(result);
+        orders.add(order);
+      }
+      return orders;
+    } catch (Exception e) {
+      throw new ExchangeException(e.getMessage());
+    }
   }
 }

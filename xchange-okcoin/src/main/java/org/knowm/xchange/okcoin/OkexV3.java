@@ -23,13 +23,7 @@ import org.knowm.xchange.okcoin.v3.dto.account.OkexSpotAccountRecord;
 import org.knowm.xchange.okcoin.v3.dto.account.OkexWithdrawalRecord;
 import org.knowm.xchange.okcoin.v3.dto.account.OkexWithdrawalRequest;
 import org.knowm.xchange.okcoin.v3.dto.account.OkexWithdrawalResponse;
-import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexFutureInstrument;
-import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexFutureTicker;
-import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexOrderBook;
-import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSpotInstrument;
-import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSpotTicker;
-import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSwapInstrument;
-import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSwapTicker;
+import org.knowm.xchange.okcoin.v3.dto.marketdata.*;
 import org.knowm.xchange.okcoin.v3.dto.trade.FundsTransferRequest;
 import org.knowm.xchange.okcoin.v3.dto.trade.FundsTransferResponse;
 import org.knowm.xchange.okcoin.v3.dto.trade.FuturesAccountsByCurrencyResponse;
@@ -280,6 +274,11 @@ public interface OkexV3 {
   OkexOrderBook getOrderBook(
       @PathParam("instrument_id") String instrumentId, @QueryParam("size") int size)
       throws IOException, OkexException;
+  @GET
+  @Path("/spot/v3/instruments/{instrument_id}/candles")
+  List<OkexSpotKLine> getKLine(
+          @PathParam("instrument_id") String instrumentId, @QueryParam("granularity") Long granularity)
+          throws IOException, OkexException;
 
   /** ******************************* Futures Trading API ********************************* */
   @GET

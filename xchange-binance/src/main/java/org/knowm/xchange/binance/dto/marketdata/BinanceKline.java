@@ -3,6 +3,7 @@ package org.knowm.xchange.binance.dto.marketdata;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Kline;
 
 public final class BinanceKline {
 
@@ -19,6 +20,9 @@ public final class BinanceKline {
   private final long numberOfTrades;
   private final BigDecimal takerBuyBaseAssetVolume;
   private final BigDecimal takerBuyQuoteAssetVolume;
+
+  // The cached ticker
+  private Kline kline;
 
   public BinanceKline(CurrencyPair pair, KlineInterval interval, Object[] obj) {
     this.pair = pair;
@@ -97,4 +101,26 @@ public final class BinanceKline {
     return String.format(
         "[%s] %s %s O:%.6f A:%.6f C:%.6f", pair, tstamp, interval, open, getAveragePrice(), close);
   }
+
+  public synchronized Kline toKline() {
+    CurrencyPair currencyPair = pair;
+    if (kline == null) {
+      kline = new Kline.Builder()
+              .currencyPair(currencyPair)
+              .openTime(openTime)
+              .open(open)
+              .high(high)
+              .low(low)
+              .close(close)
+              .volume(volume)
+              .closeTime(closeTime)
+              .quoteAssetVolume(quoteAssetVolume)
+              .numberOfTrades(numberOfTrades)
+              .takerBuyBaseAssetVolume(takerBuyBaseAssetVolume)
+              .takerBuyQuoteAssetVolume(takerBuyQuoteAssetVolume)
+              .build();
+    }
+    return kline;
+  }
+
 }

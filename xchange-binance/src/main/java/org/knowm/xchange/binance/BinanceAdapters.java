@@ -5,6 +5,7 @@ import java.math.MathContext;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.knowm.xchange.binance.dto.account.AssetDetail;
+import org.knowm.xchange.binance.dto.marketdata.BinanceKline;
 import org.knowm.xchange.binance.dto.marketdata.BinancePriceQuantity;
 import org.knowm.xchange.binance.dto.trade.BinanceOrder;
 import org.knowm.xchange.binance.dto.trade.OrderSide;
@@ -15,6 +16,7 @@ import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.marketdata.Ticker;
+import org.knowm.xchange.dto.marketdata.Kline;
 import org.knowm.xchange.dto.meta.CurrencyMetaData;
 import org.knowm.xchange.dto.meta.WalletHealth;
 import org.knowm.xchange.dto.trade.LimitOrder;
@@ -224,4 +226,24 @@ public class BinanceAdapters {
         throw new IllegalStateException("Unexpected value: " + order.getIntention());
     }
   }
+
+  private static Kline adaptKline(BinanceKline binanceKline) {
+    return new Kline.Builder()
+            .currencyPair(binanceKline.getCurrencyPair())
+            .openTime(binanceKline.getOpenTime())
+            .high(binanceKline.getHighPrice())
+            .open(binanceKline.getOpenPrice())
+            .close(binanceKline.getClosePrice())
+            .low(binanceKline.getLowPrice())
+            .volume(binanceKline.getVolume())
+            .closeTime(binanceKline.getCloseTime())
+            .build();
+  }
+
+  public static List<Kline> adaptKline(List<BinanceKline> binanceKlines) {
+    return binanceKlines.stream()
+            .map(BinanceAdapters::adaptKline)
+            .collect(Collectors.toList());
+  }
+
 }

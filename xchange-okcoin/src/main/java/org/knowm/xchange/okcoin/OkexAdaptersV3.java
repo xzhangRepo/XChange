@@ -1,24 +1,35 @@
 package org.knowm.xchange.okcoin;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.dto.account.FundingRecord.Status;
 import org.knowm.xchange.dto.account.FundingRecord.Type;
+import org.knowm.xchange.dto.marketdata.Kline;
 import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.dto.trade.MarketOrder;
+import org.knowm.xchange.dto.trade.StopOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
+import org.knowm.xchange.instrument.Instrument;
+import org.knowm.xchange.okcoin.dto.trade.OkCoinOrder;
 import org.knowm.xchange.okcoin.v3.dto.account.OkexDepositRecord;
 import org.knowm.xchange.okcoin.v3.dto.account.OkexFundingAccountRecord;
 import org.knowm.xchange.okcoin.v3.dto.account.OkexSpotAccountRecord;
 import org.knowm.xchange.okcoin.v3.dto.account.OkexWithdrawalRecord;
 import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexOrderBook;
 import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexOrderBookEntry;
+import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSpotKLine;
 import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSpotTicker;
 import org.knowm.xchange.okcoin.v3.dto.trade.FuturesAccountsResponse.FuturesAccount;
 import org.knowm.xchange.okcoin.v3.dto.trade.OkexOpenOrder;
@@ -188,5 +199,60 @@ public class OkexAdaptersV3 {
     }
 
     return allLevels;
+  }
+
+  private static Kline adaptKline(OkexSpotKLine okexKline) {
+    return new Kline.Builder()
+            .currencyPair(toPair(okexKline.getInstrumentId()))
+            .openTime(okexKline.getTime().getTime())
+            .high(okexKline.getHigh())
+            .open(okexKline.getOpen())
+            .close(okexKline.getClose())
+            .low(okexKline.getLow())
+            .volume(okexKline.getVolume())
+            .closeTime(okexKline.getTime().getTime())
+            .build();
+  }
+
+  public static List<Kline> adaptKline(List<OkexSpotKLine> binanceKlines) {
+    return binanceKlines.stream()
+            .map(OkexAdaptersV3::adaptKline)
+            .collect(Collectors.toList());
+  }
+
+  public static Order.OrderStatus adaptOrderStatus(String orderStatus) {
+//    "-2":Failed,"-1":Cancelled,"0":Open ,"1":Partially Filled, "2":Fully
+//            * Filled,"3":Submitting,"4":Cancelling
+    switch (orderStatus) {
+      case "-2":
+        return Order.OrderStatus.STOPPED;
+      case "-1":
+        return Order.OrderStatus.CANCELED;
+      case "0":
+        return Order.OrderStatus.NEW;
+      case "1":
+        return Order.OrderStatus.PARTIALLY_FILLED;
+      case "2":
+        return Order.OrderStatus.FILLED;
+      case "3":
+        return Order.OrderStatus.PENDING_NEW;
+      case "4":
+        return Order.OrderStatus.PENDING_CANCEL;
+      default:
+        return Order.OrderStatus.UNKNOWN;
+    }
+  }
+
+  public static Order adaptOkCoinOrder(OkexOpenOrder order){
+    OrderType type = order.getSide() == Side.sell ? OrderType.ASK : OrderType.BID;
+    CurrencyPair currencyPair = toPair(order.getInstrumentId());
+    Order.Builder builder = new LimitOrder.Builder(type, currencyPair).limitPrice(order.getPrice());
+    builder
+            .orderStatus(adaptOrderStatus(order.getState()))
+            .originalAmount(order.getPrice())
+            .id(order.getOrderId())
+            .timestamp(order.getTimestamp())
+            .cumulativeAmount(order.getFilledSize());
+    return builder.build();
   }
 }
