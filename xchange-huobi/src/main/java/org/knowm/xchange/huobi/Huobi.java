@@ -1,25 +1,11 @@
 package org.knowm.xchange.huobi;
 
 import java.io.IOException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
-import org.knowm.xchange.huobi.dto.account.results.HuobiAccountResult;
-import org.knowm.xchange.huobi.dto.account.results.HuobiBalanceResult;
-import org.knowm.xchange.huobi.dto.account.results.HuobiCreateWithdrawResult;
-import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressResult;
-import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressV2Result;
-import org.knowm.xchange.huobi.dto.account.results.HuobiDepositAddressWithTagResult;
-import org.knowm.xchange.huobi.dto.account.results.HuobiFeeRateResult;
-import org.knowm.xchange.huobi.dto.account.results.HuobiFundingHistoryResult;
-import org.knowm.xchange.huobi.dto.account.results.HuobiTransactFeeRateResult;
-import org.knowm.xchange.huobi.dto.account.results.HuobiWithdrawFeeRangeResult;
+import org.knowm.xchange.huobi.dto.account.HuobiLinearSwapCrossAccount;
+import org.knowm.xchange.huobi.dto.account.results.*;
 import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAllTickersResult;
 import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAssetPairsResult;
 import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAssetsResult;
@@ -167,6 +153,8 @@ public interface Huobi {
       @QueryParam("Signature") ParamsDigest signature)
       throws IOException;
 
+
+
   @GET
   @Path("v1/account/accounts/{account-id}/balance")
   HuobiBalanceResult getBalance(
@@ -285,4 +273,53 @@ public interface Huobi {
       @QueryParam("Timestamp") String nonce,
       @QueryParam("Signature") ParamsDigest signature)
       throws IOException;
+
+//  **************交割合约**********************
+  @POST
+  @Path("api/v1/contract_account_info")
+  HuobiFutureAccountResult getContractAccountInfo(
+        @QueryParam("symbol") String symbol,
+        @QueryParam("AccessKeyId") String apiKey,
+        @QueryParam("SignatureMethod") String signatureMethod,
+        @QueryParam("SignatureVersion") int SignatureVersion,
+        @QueryParam("Timestamp") String nonce,
+        @QueryParam("Signature") ParamsDigest signature)
+        throws IOException;
+
+  //  **************永续币本位合约**********************
+  @POST
+  @Path("swap-api/v1/swap_account_info")
+  HuobiSwapAccountResult getSwapAccountInfo(
+          @QueryParam("contract_code") String contractCode,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
+
+
+  //  **************永续U本位逐仓合约**********************
+  @POST
+  @Path("linear-swap-api/v1/swap_account_info")
+  HuobiLinearSwapAccountResult getLinearSwapAccountInfo(
+          @QueryParam("contract_code") String contractCode,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
+
+  //  **************永续U本位全仓合约**********************
+  @POST
+  @Path("linear-swap-api/v1/swap_cross_account_info")
+  HuobiLinearSwapCrossAccountResult getLinearSwapCrossAccountInfo(
+          @QueryParam("margin_account") String contractCode,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
 }
