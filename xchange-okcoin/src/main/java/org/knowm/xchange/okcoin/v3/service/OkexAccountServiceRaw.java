@@ -54,7 +54,8 @@ public class OkexAccountServiceRaw extends OkexBaseService {
       String from,
       String to,
       String subAccount,
-      String instrumentId)
+      String instrumentId,
+      String toInstrumentId)
       throws IOException {
     FundsTransferRequest req =
         FundsTransferRequest.builder()
@@ -64,6 +65,7 @@ public class OkexAccountServiceRaw extends OkexBaseService {
             .to(to)
             .subAccount(subAccount)
             .instrumentId(instrumentId)
+                .toInstrumentId(toInstrumentId)
             .build();
     FundsTransferResponse res = okex.fundsTransfer(apikey, digest, timestamp(), passphrase, req);
     res.checkResult();

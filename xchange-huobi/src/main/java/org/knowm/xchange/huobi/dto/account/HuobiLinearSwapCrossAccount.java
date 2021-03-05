@@ -1,6 +1,7 @@
 package org.knowm.xchange.huobi.dto.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,7 +19,7 @@ public class HuobiLinearSwapCrossAccount {
     private BigDecimal profitUnreal;
     private BigDecimal withdrawAvailable;
     private BigDecimal riskRate;
-    private List<String> contractDetail;
+    private List<HuobiLinearSwapCrossDetailAccount> contractDetail;
 
     public HuobiLinearSwapCrossAccount(
             @JsonProperty("margin_mode")String marginMode,
@@ -32,7 +33,7 @@ public class HuobiLinearSwapCrossAccount {
             @JsonProperty("profit_unreal")BigDecimal profitUnreal,
             @JsonProperty("withdraw_available")BigDecimal withdrawAvailable,
             @JsonProperty("risk_rate")BigDecimal riskRate,
-            @JsonProperty("contract_detail")List<String> contractDetail) {
+            @JsonProperty("contract_detail")List<HuobiLinearSwapCrossDetailAccount> contractDetail) {
         this.marginMode = marginMode;
         this.marginAccount = marginAccount;
         this.marginAsset = marginAsset;
@@ -135,11 +136,11 @@ public class HuobiLinearSwapCrossAccount {
         this.riskRate = riskRate;
     }
 
-    public List<String> getContractDetail() {
+    public List<HuobiLinearSwapCrossDetailAccount> getContractDetail() {
         return contractDetail;
     }
 
-    public void setContractDetail(List<String> contractDetail) {
+    public void setContractDetail(List<HuobiLinearSwapCrossDetailAccount> contractDetail) {
         this.contractDetail = contractDetail;
     }
 
@@ -160,4 +161,6 @@ public class HuobiLinearSwapCrossAccount {
                 ", contractDetail=" + contractDetail +
                 '}';
     }
+
+
 }

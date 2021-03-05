@@ -22,4 +22,7 @@ public class FundsTransferRequest {
 
   @JsonProperty("instrument_id")
   private String instrumentId;
+
+  @JsonProperty("to_instrument_id")
+  private String toInstrumentId;
 }
