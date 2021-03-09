@@ -7,6 +7,8 @@ import org.knowm.xchange.huobi.HuobiUtils;
 import org.knowm.xchange.huobi.dto.marketdata.*;
 import org.knowm.xchange.huobi.dto.marketdata.results.*;
 
+import javax.ws.rs.QueryParam;
+
 public class HuobiMarketDataServiceRaw extends HuobiBaseService {
 
   public HuobiMarketDataServiceRaw(Exchange exchange) {
@@ -41,4 +43,42 @@ public class HuobiMarketDataServiceRaw extends HuobiBaseService {
     HuobiTradesResult tradesResult = huobi.getTrades(huobiCurrencyPair, size);
     return checkResult(tradesResult);
   }
+
+  /**
+   * 获取交割市场信息
+   * @param symbol
+   * @param contractType
+   * @param contractCode
+   * @return
+   * @throws IOException
+   */
+  public ContractContractInfo[] getContractContractInfo(String symbol,String contractType,String contractCode)throws IOException{
+    ContractContractInfoResult contractResult = huobi.getContractContractInfo(symbol,contractType,contractCode);
+    return checkResultV3(contractResult);
+  }
+  /**
+   * 获取交割聚合行情数据
+   */
+  public MarketDetailMerged getMarketDetailMerged(String symbol) throws IOException {
+    MarketDetailMergedResult result = huobi.getMarketDetailMerged(symbol);
+    return checkResultV3(result);
+  }
+
+  /**
+   * 永续合约批量聚合数据币本位
+   */
+  public SwapMarketDetailMerged[] getSwapMarketDetailMerged(String contractCode) throws IOException {
+    SwapMarketDetailMergedResult result = huobi.getSwapMarketDetailMerged(contractCode);
+    return checkResultV3(result);
+  }
+
+
+  /**
+   * 永续合约批量聚合数据U本位
+   */
+  public SwapMarketDetailMerged[] getLinearSwapMarketDetailMerged(String contractCode) throws IOException {
+    SwapMarketDetailMergedResult result = huobi.getLinearSwapMarketDetailMerged(contractCode);
+    return checkResultV3(result);
+  }
+
 }

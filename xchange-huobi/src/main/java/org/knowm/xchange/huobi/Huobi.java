@@ -6,12 +6,7 @@ import javax.ws.rs.core.MediaType;
 import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
 import org.knowm.xchange.huobi.dto.account.HuobiLinearSwapCrossAccount;
 import org.knowm.xchange.huobi.dto.account.results.*;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAllTickersResult;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAssetPairsResult;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiAssetsResult;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiDepthResult;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiTickerResult;
-import org.knowm.xchange.huobi.dto.marketdata.results.HuobiTradesResult;
+import org.knowm.xchange.huobi.dto.marketdata.results.*;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiMatchesResult;
@@ -285,6 +280,19 @@ public interface Huobi {
         @QueryParam("Timestamp") String nonce,
         @QueryParam("Signature") ParamsDigest signature)
         throws IOException;
+  //交割合约 - 获取合约信息
+  @GET
+  @Path("api/v1/contract_contract_info")
+  ContractContractInfoResult getContractContractInfo(@QueryParam("symbol") String symbol,
+                                                     @QueryParam("contract_type") String contractType,
+                                                     @QueryParam("contract_code") String contractCode)
+          throws IOException;
+
+  //交割合约聚合数据
+  @GET
+  @Path("market/detail/merged")
+  MarketDetailMergedResult getMarketDetailMerged(@QueryParam("symbol") String symbol)
+          throws IOException;
 
   //  **************永续币本位合约**********************
   @POST
@@ -298,6 +306,10 @@ public interface Huobi {
           @QueryParam("Signature") ParamsDigest signature)
           throws IOException;
 
+  @GET
+  @Path("swap-ex/market/detail/batch_merged")
+  SwapMarketDetailMergedResult getSwapMarketDetailMerged(@QueryParam("contract_code") String contractCode)
+          throws IOException;
 
   //  **************永续U本位逐仓合约**********************
   @POST
@@ -311,6 +323,11 @@ public interface Huobi {
           @QueryParam("Signature") ParamsDigest signature)
           throws IOException;
 
+  @GET
+  @Path("linear-swap-ex/market/detail/batch_merged")
+  SwapMarketDetailMergedResult getLinearSwapMarketDetailMerged(@QueryParam("contract_code") String contractCode)
+          throws IOException;
+
   //  **************永续U本位全仓合约**********************
   @POST
   @Path("linear-swap-api/v1/swap_cross_account_info")
@@ -322,4 +339,7 @@ public interface Huobi {
           @QueryParam("Timestamp") String nonce,
           @QueryParam("Signature") ParamsDigest signature)
           throws IOException;
+
+
+
 }
