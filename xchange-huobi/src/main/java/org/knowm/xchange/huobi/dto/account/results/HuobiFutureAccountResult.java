@@ -8,8 +8,8 @@ public class HuobiFutureAccountResult  extends HuobiResultV3<HuobiFutureAccount[
 
     public HuobiFutureAccountResult(
             @JsonProperty("status") String status,
-            @JsonProperty("err-code") String errCode,
-            @JsonProperty("err-msg") String errMsg,
+            @JsonProperty("err_code") String errCode,
+            @JsonProperty("err_msg") String errMsg,
             @JsonProperty("data") HuobiFutureAccount[] result
     ) {
         super(status,errCode, errMsg,result);
