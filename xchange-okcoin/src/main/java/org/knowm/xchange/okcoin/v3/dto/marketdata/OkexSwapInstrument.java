@@ -41,6 +41,9 @@ public class OkexSwapInstrument {
   @JsonProperty("tick_size")
   private BigDecimal tickSize;
 
+  @JsonProperty("category")
+  private int category;
+
   public Date getListing() {
     return Date.from(Instant.parse(listing));
   }
@@ -48,4 +51,7 @@ public class OkexSwapInstrument {
   public Date getDelivery() {
     return Date.from(Instant.parse(delivery));
   }
+
+
+
 }

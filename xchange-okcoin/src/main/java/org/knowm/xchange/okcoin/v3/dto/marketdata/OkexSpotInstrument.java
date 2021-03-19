@@ -30,4 +30,6 @@ public class OkexSpotInstrument {
   /** trading price increment, ie "0.1" */
   @JsonProperty("tick_size")
   private BigDecimal tickSize;
+  @JsonProperty("category")
+  private int category;
 }

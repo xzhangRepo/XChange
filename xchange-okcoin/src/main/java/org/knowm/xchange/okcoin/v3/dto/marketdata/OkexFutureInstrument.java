@@ -48,4 +48,8 @@ public class OkexFutureInstrument {
   private boolean inverse;
   /** Contract denomination currency eg: USD，BTC，LTC，ETC , XRP, EOS */
   private String contractValCurrency;
+
+  @JsonProperty("category")
+  private int category;
+
 }
