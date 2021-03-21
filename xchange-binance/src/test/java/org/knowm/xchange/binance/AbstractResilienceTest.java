@@ -8,7 +8,7 @@ import org.knowm.xchange.ExchangeSpecification;
 
 public class AbstractResilienceTest {
 
-  @Rule public WireMockRule wireMockRule = new WireMockRule();
+  @Rule public WireMockRule wireMockRule = new WireMockRule(28810);
 
   public static int READ_TIMEOUT_MS = 1000;
 
