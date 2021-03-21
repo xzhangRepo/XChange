@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order.OrderType;
@@ -13,17 +15,14 @@ import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiUtils;
+import org.knowm.xchange.huobi.dto.trade.FutureOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiMatchResult;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiMatchesResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderInfoResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiOrdersResult;
+import org.knowm.xchange.huobi.dto.trade.results.*;
 import org.knowm.xchange.service.trade.params.CurrencyPairParam;
 
-class HuobiTradeServiceRaw extends HuobiBaseService {
+public class HuobiTradeServiceRaw extends HuobiBaseService {
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
   HuobiTradeServiceRaw(Exchange exchange) {
@@ -202,5 +201,21 @@ class HuobiTradeServiceRaw extends HuobiBaseService {
   private String getAccountId() throws IOException {
     return String.valueOf(
         ((HuobiAccountServiceRaw) exchange.getAccountService()).getAccounts()[0].getId());
+  }
+
+  /**
+   * 交割合约下单
+   * @param request
+   * @return
+   * @throws IOException
+   */
+  public FutureOrderInfo createFutureOrder(FutureOrderRequest request) throws IOException {
+    FutureOrderResult result =  huobi.futuresOrder(request,
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResultV3(result);
   }
 }

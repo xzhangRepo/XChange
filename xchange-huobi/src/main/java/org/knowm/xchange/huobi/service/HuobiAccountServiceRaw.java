@@ -6,6 +6,7 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.huobi.HuobiUtils;
 import org.knowm.xchange.huobi.dto.account.*;
 import org.knowm.xchange.huobi.dto.account.results.*;
+import org.knowm.xchange.huobi.dto.trade.FutureTransferRequest;
 
 public class HuobiAccountServiceRaw extends HuobiBaseService {
   private HuobiAccount[] accountCache = null;
@@ -157,6 +158,37 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
     return checkResultV3(result);
   }
 
+  //持仓信息
+  public HuobiFuturePosition[] getFuturePositionInfo(String symbol) throws IOException {
+    HuobiFuturePositionInfoResult result = huobi.getContractPositionInfo(
+            symbol,
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResultV3(result);
+  }
+
+  /**
+   * 资金划转
+   * @param currency
+   * @param amount
+   * @param type
+   * @return
+   * @throws IOException
+   */
+  public String futuresTransfer(String currency,String amount,String type) throws IOException {
+    FutureTransferRequest request  = FutureTransferRequest.builder().currency(currency).amount(amount).type(type).build();
+    HuobiFutureTransferResult result = huobi.futuresTransfer(
+              request,
+              exchange.getExchangeSpecification().getApiKey(),
+              HuobiDigest.HMAC_SHA_256,
+              2,
+              HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+              signatureCreator);
+    return checkResult(result);
+  }
   //永续合约账户信息
   public HuobiSwapAccount[] getSwapContractAccountInfo(String contractCode) throws IOException {
     HuobiSwapAccountResult result = huobi.getSwapAccountInfo(

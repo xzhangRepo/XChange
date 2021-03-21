@@ -9,7 +9,7 @@ public final  class ContractContractInfo {
     private String symbol;
     private String contractCode;
     private String contractType;
-    private Integer contractSize;
+    private BigDecimal contractSize;
     private BigDecimal priceTick;
     private String deliveryDate;
     private String createDate;
@@ -20,7 +20,7 @@ public final  class ContractContractInfo {
             @JsonProperty("symbol")String symbol,
             @JsonProperty("contract_code")String contractCode,
             @JsonProperty("contract_type")String contractType,
-            @JsonProperty("contract_size")Integer contractSize,
+            @JsonProperty("contract_size")BigDecimal contractSize,
             @JsonProperty("price_tick")BigDecimal priceTick,
             @JsonProperty("delivery_date")String deliveryDate,
             @JsonProperty("create_date")String createDate,
@@ -59,11 +59,11 @@ public final  class ContractContractInfo {
         this.contractType = contractType;
     }
 
-    public Integer getContractSize() {
+    public BigDecimal getContractSize() {
         return contractSize;
     }
 
-    public void setContractSize(Integer contractSize) {
+    public void setContractSize(BigDecimal contractSize) {
         this.contractSize = contractSize;
     }
 

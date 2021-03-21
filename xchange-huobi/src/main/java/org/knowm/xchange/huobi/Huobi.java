@@ -7,12 +7,10 @@ import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
 import org.knowm.xchange.huobi.dto.account.HuobiLinearSwapCrossAccount;
 import org.knowm.xchange.huobi.dto.account.results.*;
 import org.knowm.xchange.huobi.dto.marketdata.results.*;
+import org.knowm.xchange.huobi.dto.trade.FutureOrderRequest;
+import org.knowm.xchange.huobi.dto.trade.FutureTransferRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiMatchesResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderInfoResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiOrdersResult;
+import org.knowm.xchange.huobi.dto.trade.results.*;
 import si.mazi.rescu.ParamsDigest;
 
 @Path("/")
@@ -280,6 +278,42 @@ public interface Huobi {
         @QueryParam("Timestamp") String nonce,
         @QueryParam("Signature") ParamsDigest signature)
         throws IOException;
+
+  @POST
+  @Path("api/v1/contract_position_info")
+  HuobiFuturePositionInfoResult getContractPositionInfo(
+          @QueryParam("symbol") String symbol,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
+
+  @POST
+  @Path("v1/futures/transfer")
+  @Consumes(MediaType.APPLICATION_JSON)
+  HuobiFutureTransferResult futuresTransfer(
+          FutureTransferRequest request,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
+
+  @POST
+  @Path("api/v1/contract_order")
+  @Consumes(MediaType.APPLICATION_JSON)
+  FutureOrderResult futuresOrder(
+          FutureOrderRequest request,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
+
   //交割合约 - 获取合约信息
   @GET
   @Path("api/v1/contract_contract_info")
@@ -293,6 +327,7 @@ public interface Huobi {
   @Path("market/detail/merged")
   MarketDetailMergedResult getMarketDetailMerged(@QueryParam("symbol") String symbol)
           throws IOException;
+
 
   //  **************永续币本位合约**********************
   @POST
