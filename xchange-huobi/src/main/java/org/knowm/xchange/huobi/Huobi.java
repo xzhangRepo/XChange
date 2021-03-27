@@ -7,9 +7,7 @@ import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
 import org.knowm.xchange.huobi.dto.account.HuobiLinearSwapCrossAccount;
 import org.knowm.xchange.huobi.dto.account.results.*;
 import org.knowm.xchange.huobi.dto.marketdata.results.*;
-import org.knowm.xchange.huobi.dto.trade.FutureOrderRequest;
-import org.knowm.xchange.huobi.dto.trade.FutureTransferRequest;
-import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
+import org.knowm.xchange.huobi.dto.trade.*;
 import org.knowm.xchange.huobi.dto.trade.results.*;
 import si.mazi.rescu.ParamsDigest;
 
@@ -314,6 +312,18 @@ public interface Huobi {
           @QueryParam("Signature") ParamsDigest signature)
           throws IOException;
 
+  @POST
+  @Path("v2/account/transfer")
+  @Consumes(MediaType.APPLICATION_JSON)
+  HuobiSwapTransferResult swapTransfer(
+          SwapTransferRequest request,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
+
   //交割合约 - 获取合约信息
   @GET
   @Path("api/v1/contract_contract_info")
@@ -342,8 +352,49 @@ public interface Huobi {
           throws IOException;
 
   @GET
+  @Path("swap-api/v1/swap_contract_info")
+  SwapContractInfoResult getSwapContractInfo(
+          @QueryParam("contract_code") String contractCode)
+          throws IOException;
+
+
+  /**
+   * 特指币本位合约
+   * @param contractCode
+   * @param apiKey
+   * @param signatureMethod
+   * @param SignatureVersion
+   * @param nonce
+   * @param signature
+   * @return
+   * @throws IOException
+   */
+  @POST
+  @Path("swap-api/v1/swap_position_info")
+  HuobiSwapPositionResult getSwapPositionInfo(
+          @QueryParam("contract_code") String contractCode,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
+
+  @GET
   @Path("swap-ex/market/detail/batch_merged")
   SwapMarketDetailMergedResult getSwapMarketDetailMerged(@QueryParam("contract_code") String contractCode)
+          throws IOException;
+
+  @POST
+  @Path("swap-api/v1/swap_order")
+  @Consumes(MediaType.APPLICATION_JSON)
+  SwapOrderResult swapOrder(
+          SwapOrderRequest request,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
           throws IOException;
 
   //  **************永续U本位逐仓合约**********************

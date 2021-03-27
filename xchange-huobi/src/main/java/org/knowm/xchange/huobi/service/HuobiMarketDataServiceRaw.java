@@ -72,6 +72,16 @@ public class HuobiMarketDataServiceRaw extends HuobiBaseService {
     return checkResultV3(result);
   }
 
+  /**
+   * 获取永续合约信息
+   * @param contractCode
+   * @return
+   * @throws IOException
+   */
+  public SwapContractInfo[] getSwapContractInfo(String contractCode)throws IOException{
+    SwapContractInfoResult contractResult = huobi.getSwapContractInfo(contractCode);
+    return checkResultV3(contractResult);
+  }
 
   /**
    * 永续合约批量聚合数据U本位

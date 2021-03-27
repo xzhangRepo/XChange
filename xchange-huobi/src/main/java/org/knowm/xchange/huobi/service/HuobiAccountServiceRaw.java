@@ -7,6 +7,7 @@ import org.knowm.xchange.huobi.HuobiUtils;
 import org.knowm.xchange.huobi.dto.account.*;
 import org.knowm.xchange.huobi.dto.account.results.*;
 import org.knowm.xchange.huobi.dto.trade.FutureTransferRequest;
+import org.knowm.xchange.huobi.dto.trade.SwapTransferRequest;
 
 public class HuobiAccountServiceRaw extends HuobiBaseService {
   private HuobiAccount[] accountCache = null;
@@ -189,6 +190,28 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
               signatureCreator);
     return checkResult(result);
   }
+
+
+  /**
+   * 永续合约转币
+   * @param from
+   * @param to
+   * @param currency
+   * @param amount
+   * @return
+   * @throws IOException
+   */
+  public String swapTransfer(String from,String to,String currency,BigDecimal amount) throws IOException {
+    SwapTransferRequest request  = SwapTransferRequest.builder().from(from).to(to).currency(currency).amount(amount).build();
+    HuobiSwapTransferResult result = huobi.swapTransfer(
+            request,
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResult(result);
+  }
   //永续合约账户信息
   public HuobiSwapAccount[] getSwapContractAccountInfo(String contractCode) throws IOException {
     HuobiSwapAccountResult result = huobi.getSwapAccountInfo(
@@ -200,6 +223,19 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
             signatureCreator);
     return checkResultV3(result);
   }
+
+  //永续合约持仓信息
+  public HuobiSwapPosition[] getSwapPositionInfo(String contractCode) throws IOException {
+    HuobiSwapPositionResult result = huobi.getSwapPositionInfo(
+            contractCode,
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResultV3(result);
+  }
+
   //永续合约账户信息
   public HuobiLinearSwapAccount[] getLinearSwapContractAccountInfo(String contractCode) throws IOException {
     HuobiLinearSwapAccountResult result = huobi.getLinearSwapAccountInfo(

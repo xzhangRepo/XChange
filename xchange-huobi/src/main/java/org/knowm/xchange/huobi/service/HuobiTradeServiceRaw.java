@@ -15,10 +15,7 @@ import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiUtils;
-import org.knowm.xchange.huobi.dto.trade.FutureOrderRequest;
-import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
-import org.knowm.xchange.huobi.dto.trade.HuobiMatchResult;
-import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
+import org.knowm.xchange.huobi.dto.trade.*;
 import org.knowm.xchange.huobi.dto.trade.results.*;
 import org.knowm.xchange.service.trade.params.CurrencyPairParam;
 
@@ -211,6 +208,22 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
    */
   public FutureOrderInfo createFutureOrder(FutureOrderRequest request) throws IOException {
     FutureOrderResult result =  huobi.futuresOrder(request,
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResultV3(result);
+  }
+
+  /**
+   * 永续合约交易
+   * @param request
+   * @return
+   * @throws IOException
+   */
+  public SwapOrderInfo createSwapOrder(SwapOrderRequest request) throws IOException {
+    SwapOrderResult result =  huobi.swapOrder(request,
             exchange.getExchangeSpecification().getApiKey(),
             HuobiDigest.HMAC_SHA_256,
             2,
