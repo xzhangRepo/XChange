@@ -101,4 +101,26 @@ public class HuobiMarketDataServiceRaw extends HuobiBaseService {
     SwapContractInfoResult contractResult = huobi.getLinearSwapContractInfo(contractCode,supportMarginMode);
     return checkResultV3(contractResult);
   }
+
+  /**
+   * 资金费率
+   * @param contractCode
+   * @return
+   * @throws IOException
+   */
+  public FundingRate[] getFundingRate(String contractCode) throws IOException {
+    FundingRateResult fundingRateResult = huobi.getFundingRate(contractCode);
+    return checkResultV3(fundingRateResult);
+  }
+
+  /**
+   * 资金费率
+   * @param contractCode
+   * @return
+   * @throws IOException
+   */
+  public FundingRate[] getLinearFundingRate(String contractCode) throws IOException {
+    FundingRateResult fundingRateResult = huobi.getLinearFundingRate(contractCode);
+    return checkResultV3(fundingRateResult);
+  }
 }

@@ -467,4 +467,17 @@ public interface Huobi {
           @QueryParam("support_margin_mode") String supportMarginMode)
           throws IOException;
 
+  @GET
+  @Path("swap-api/v1/swap_batch_funding_rate")
+  FundingRateResult getFundingRate(
+          @QueryParam("contract_code") String contractCode)
+          throws IOException;
+
+  @GET
+  @Path("linear-swap-api/v1/swap_batch_funding_rate")
+  FundingRateResult getLinearFundingRate(
+          @QueryParam("contract_code") String contractCode)
+          throws IOException;
+
+
 }
