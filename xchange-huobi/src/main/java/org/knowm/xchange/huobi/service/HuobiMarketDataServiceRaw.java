@@ -91,4 +91,14 @@ public class HuobiMarketDataServiceRaw extends HuobiBaseService {
     return checkResultV3(result);
   }
 
+  /**
+   * 获取U本位永续合约信息
+   * @param contractCode
+   * @return
+   * @throws IOException
+   */
+  public SwapContractInfo[] getLinearSwapContractInfo(String contractCode,String supportMarginMode)throws IOException{
+    SwapContractInfoResult contractResult = huobi.getLinearSwapContractInfo(contractCode,supportMarginMode);
+    return checkResultV3(contractResult);
+  }
 }

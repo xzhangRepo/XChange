@@ -231,4 +231,21 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
             signatureCreator);
     return checkResultV3(result);
   }
+
+
+  /**
+   * 永续合约交易
+   * @param request
+   * @return
+   * @throws IOException
+   */
+  public SwapOrderInfo createLinearSwapOrder(SwapOrderRequest request) throws IOException {
+    SwapOrderResult result =  huobi.linearSwapOrder(request,
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResultV3(result);
+  }
 }

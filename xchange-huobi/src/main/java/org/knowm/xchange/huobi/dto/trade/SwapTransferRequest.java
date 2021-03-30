@@ -23,4 +23,7 @@ public class SwapTransferRequest {
 
     @JsonProperty("amount")
     private BigDecimal amount;
+
+    @JsonProperty("margin-account")
+    private String marginAccount;
 }

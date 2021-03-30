@@ -426,6 +426,45 @@ public interface Huobi {
           @QueryParam("Signature") ParamsDigest signature)
           throws IOException;
 
+  @POST
+  @Path("linear-swap-api/v1/swap_cross_position_info")
+  HuobiSwapPositionResult getLinearSwapCrossPositionInfo(
+          @QueryParam("contract_code") String contractCode,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
 
+  /**
+   * 【全仓】合约下单
+   * @param request
+   * @param apiKey
+   * @param signatureMethod
+   * @param SignatureVersion
+   * @param nonce
+   * @param signature
+   * @return
+   * @throws IOException
+   */
+  @POST
+  @Path("linear-swap-api/v1/swap_cross_order")
+  @Consumes(MediaType.APPLICATION_JSON)
+  SwapOrderResult linearSwapOrder(
+          SwapOrderRequest request,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
+
+  @GET
+  @Path("linear-swap-api/v1/swap_contract_info")
+  SwapContractInfoResult getLinearSwapContractInfo(
+          @QueryParam("contract_code") String contractCode,
+          @QueryParam("support_margin_mode") String supportMarginMode)
+          throws IOException;
 
 }

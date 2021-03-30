@@ -198,11 +198,12 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
    * @param to
    * @param currency
    * @param amount
+   * @param marginAccount
    * @return
    * @throws IOException
    */
-  public String swapTransfer(String from,String to,String currency,BigDecimal amount) throws IOException {
-    SwapTransferRequest request  = SwapTransferRequest.builder().from(from).to(to).currency(currency).amount(amount).build();
+  public String swapTransfer(String from,String to,String currency,BigDecimal amount,String marginAccount) throws IOException {
+    SwapTransferRequest request  = SwapTransferRequest.builder().from(from).to(to).currency(currency).amount(amount).marginAccount(marginAccount).build();
     HuobiSwapTransferResult result = huobi.swapTransfer(
             request,
             exchange.getExchangeSpecification().getApiKey(),
@@ -261,5 +262,15 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
     return checkResultV3(result);
   }
 
-
+  //永续合约u本位持仓信息（全仓信息）
+  public HuobiSwapPosition[] getLinearSwapCrossPositionInfo(String contractCode) throws IOException {
+    HuobiSwapPositionResult result = huobi.getLinearSwapCrossPositionInfo(
+            contractCode,
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResultV3(result);
+  }
 }
