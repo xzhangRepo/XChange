@@ -273,4 +273,16 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
             signatureCreator);
     return checkResultV3(result);
   }
+
+  //永续合约u本位持仓信息（逐仓信息）
+  public HuobiSwapPosition[] getLinearSwapPositionInfo(String contractCode) throws IOException {
+    HuobiSwapPositionResult result = huobi.getLinearSwapPositionInfo(
+            contractCode,
+            exchange.getExchangeSpecification().getApiKey(),
+            HuobiDigest.HMAC_SHA_256,
+            2,
+            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+            signatureCreator);
+    return checkResultV3(result);
+  }
 }

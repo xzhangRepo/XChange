@@ -502,5 +502,26 @@ public interface Huobi {
           @QueryParam("contract_code") String contractCode)
           throws IOException;
 
+  /**
+   * 特指币本位合约
+   * @param contractCode
+   * @param apiKey
+   * @param signatureMethod
+   * @param SignatureVersion
+   * @param nonce
+   * @param signature
+   * @return
+   * @throws IOException
+   */
+  @POST
+  @Path("linear-swap-api/v1/swap_position_info")
+  HuobiSwapPositionResult getLinearSwapPositionInfo(
+          @QueryParam("contract_code") String contractCode,
+          @QueryParam("AccessKeyId") String apiKey,
+          @QueryParam("SignatureMethod") String signatureMethod,
+          @QueryParam("SignatureVersion") int SignatureVersion,
+          @QueryParam("Timestamp") String nonce,
+          @QueryParam("Signature") ParamsDigest signature)
+          throws IOException;
 
 }
