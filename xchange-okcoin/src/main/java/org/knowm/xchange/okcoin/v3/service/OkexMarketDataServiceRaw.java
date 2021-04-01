@@ -9,6 +9,7 @@ import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSpotInstrument;
 import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSpotTicker;
 import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSwapInstrument;
 import org.knowm.xchange.okcoin.v3.dto.marketdata.OkexSwapTicker;
+import org.knowm.xchange.okcoin.v5.dto.marketdata.OkexInstrument;
 
 public class OkexMarketDataServiceRaw extends OkexBaseService {
 
@@ -43,5 +44,17 @@ public class OkexMarketDataServiceRaw extends OkexBaseService {
 
   public List<OkexSwapTicker> getAllSwapTickers() throws IOException {
     return okex.getAllSwapTickers();
+  }
+
+  /**
+   *
+   * @param instType  SPOT：币币 SWAP：永续合约 FUTURES：交割合约 OPTION：期权
+   * @param uly  合约标的指数，仅适用于交割/永续/期权，期权必填
+   * @param instId 产品ID
+   * @return
+   * @throws IOException
+   */
+  public List<OkexInstrument> getAllInstruments(String instType,String uly,String instId) throws IOException {
+    return checkResultV5(okex.getAllInstruments(instType,uly,instId));
   }
 }

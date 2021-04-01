@@ -3,6 +3,8 @@ package org.knowm.xchange.okcoin.v3.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.okcoin.OkexAdaptersV3;
 import org.knowm.xchange.okcoin.OkexExchangeV3;
@@ -28,6 +30,9 @@ import org.knowm.xchange.okcoin.v3.dto.trade.SwapMultipleOrderPlacementRequest;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapOpenOrdersResponse;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapOrderBatchCancellationRequest;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapOrderPlacementRequest;
+import org.knowm.xchange.okcoin.v5.dto.trade.OrderInfo;
+import org.knowm.xchange.okcoin.v5.dto.trade.OrderInfoResult;
+import org.knowm.xchange.okcoin.v5.dto.trade.OrderRequest;
 
 public class OkexTradeServiceRaw extends OkexBaseService {
 
@@ -207,4 +212,16 @@ public class OkexTradeServiceRaw extends OkexBaseService {
     final String instrument = OkexAdaptersV3.toSpotInstrument(pair);
     return getSpotOrderDetails(orderId, instrument);
   }
+
+  /**
+   * v5 下单
+   * @param req
+   * @return
+   * @throws IOException
+   */
+  public List<OrderInfo> placeOrderV5(OrderRequest req) throws IOException {
+    OrderInfoResult orderInfoResult = okex.placeOrderV5(apikey, digest, timestamp(), passphrase,req);
+    return checkResultV5Order(orderInfoResult);
+  }
+
 }

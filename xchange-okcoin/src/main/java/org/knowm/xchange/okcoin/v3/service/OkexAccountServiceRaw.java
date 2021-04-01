@@ -29,6 +29,7 @@ import org.knowm.xchange.okcoin.v3.dto.trade.MarginRepaymentResponse;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapAccountsResponse;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapAccountsResponse.SwapAccountInfo;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapPositionsEntry;
+import org.knowm.xchange.okcoin.v5.dto.account.AccountBalance;
 
 public class OkexAccountServiceRaw extends OkexBaseService {
 
@@ -147,5 +148,12 @@ public class OkexAccountServiceRaw extends OkexBaseService {
 
   public MarginRepaymentResponse marginRepayment(MarginRepaymentRequest req) throws IOException {
     return okex.marginRepayment(apikey, digest, timestamp(), passphrase, req);
+  }
+
+
+
+  /*******************v5***********/
+  public List<AccountBalance> getBalanceV5(String ccy) throws IOException {
+    return checkResultV5(okex.getbalance(ccy,apikey, digest, timestamp(), passphrase));
   }
 }

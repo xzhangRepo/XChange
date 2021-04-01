@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.knowm.xchange.okcoin.v3.dto.account.BillType;
 import org.knowm.xchange.okcoin.v3.dto.account.FuturesBillsResponse;
 import org.knowm.xchange.okcoin.v3.dto.account.FuturesLeverageResponse;
@@ -58,6 +60,12 @@ import org.knowm.xchange.okcoin.v3.dto.trade.SwapOrderBatchCancellationRequest;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapOrderPlacementRequest;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapPositionsEntry;
 import org.knowm.xchange.okcoin.v3.service.OkexException;
+import org.knowm.xchange.okcoin.v3.service.OkexV5Exception;
+import org.knowm.xchange.okcoin.v5.dto.account.AccountBalanceResult;
+import org.knowm.xchange.okcoin.v5.dto.marketdata.OkexInstrument;
+import org.knowm.xchange.okcoin.v5.dto.marketdata.OkexInstrumentResult;
+import org.knowm.xchange.okcoin.v5.dto.trade.OrderInfoResult;
+import org.knowm.xchange.okcoin.v5.dto.trade.OrderRequest;
 import si.mazi.rescu.ParamsDigest;
 
 @Path("/api")
@@ -694,4 +702,35 @@ public interface OkexV3 {
       @QueryParam("to") String to,
       @QueryParam("limit") Integer limit)
       throws IOException, OkexException;
+
+
+
+
+  @GET
+  @Path("/v5/public/instruments")
+  OkexInstrumentResult getAllInstruments(
+          @QueryParam("instType") String instType,
+          @QueryParam("uly")String uly,
+          @QueryParam("instId")String instId) throws IOException, OkexV5Exception;
+
+  @GET
+  @Path("/v5/account/balance")
+  AccountBalanceResult getbalance(
+          @QueryParam("ccy") String ccy,
+          @HeaderParam(OK_ACCESS_KEY) String apiKey,
+          @HeaderParam(OK_ACCESS_SIGN) ParamsDigest signature,
+          @HeaderParam(OK_ACCESS_TIMESTAMP) String timestamp,
+          @HeaderParam(OK_ACCESS_PASSPHRASE) String passphrase)
+          throws IOException, OkexV5Exception;
+
+  @POST
+  @Path("/v5/trade/order")
+  @Consumes(MediaType.APPLICATION_JSON)
+  OrderInfoResult placeOrderV5(
+          @HeaderParam(OK_ACCESS_KEY) String apiKey,
+          @HeaderParam(OK_ACCESS_SIGN) ParamsDigest signature,
+          @HeaderParam(OK_ACCESS_TIMESTAMP) String timestamp,
+          @HeaderParam(OK_ACCESS_PASSPHRASE) String passphrase,
+          OrderRequest req)
+          throws IOException;
 }
