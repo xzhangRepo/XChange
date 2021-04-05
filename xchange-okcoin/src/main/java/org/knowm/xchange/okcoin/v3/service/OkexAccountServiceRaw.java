@@ -30,6 +30,7 @@ import org.knowm.xchange.okcoin.v3.dto.trade.SwapAccountsResponse;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapAccountsResponse.SwapAccountInfo;
 import org.knowm.xchange.okcoin.v3.dto.trade.SwapPositionsEntry;
 import org.knowm.xchange.okcoin.v5.dto.account.AccountBalance;
+import org.knowm.xchange.okcoin.v5.dto.account.AccountPosition;
 
 public class OkexAccountServiceRaw extends OkexBaseService {
 
@@ -155,5 +156,9 @@ public class OkexAccountServiceRaw extends OkexBaseService {
   /*******************v5***********/
   public List<AccountBalance> getBalanceV5(String ccy) throws IOException {
     return checkResultV5(okex.getbalance(ccy,apikey, digest, timestamp(), passphrase));
+  }
+
+  public List<AccountPosition> getpositionsV5(String instType, String instId, String posId) throws IOException {
+    return checkResultV5(okex.getpositions(instType,instId,posId,apikey, digest, timestamp(), passphrase));
   }
 }

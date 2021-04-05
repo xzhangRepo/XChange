@@ -62,6 +62,7 @@ import org.knowm.xchange.okcoin.v3.dto.trade.SwapPositionsEntry;
 import org.knowm.xchange.okcoin.v3.service.OkexException;
 import org.knowm.xchange.okcoin.v3.service.OkexV5Exception;
 import org.knowm.xchange.okcoin.v5.dto.account.AccountBalanceResult;
+import org.knowm.xchange.okcoin.v5.dto.account.AccountPositionResult;
 import org.knowm.xchange.okcoin.v5.dto.marketdata.OkexInstrument;
 import org.knowm.xchange.okcoin.v5.dto.marketdata.OkexInstrumentResult;
 import org.knowm.xchange.okcoin.v5.dto.trade.OrderInfoResult;
@@ -722,6 +723,19 @@ public interface OkexV3 {
           @HeaderParam(OK_ACCESS_TIMESTAMP) String timestamp,
           @HeaderParam(OK_ACCESS_PASSPHRASE) String passphrase)
           throws IOException, OkexV5Exception;
+
+  @GET
+  @Path("/v5/account/positions")
+  AccountPositionResult getpositions(
+          @QueryParam("instType") String instType,
+          @QueryParam("instId") String instId,
+          @QueryParam("posId") String posId,
+          @HeaderParam(OK_ACCESS_KEY) String apiKey,
+          @HeaderParam(OK_ACCESS_SIGN) ParamsDigest signature,
+          @HeaderParam(OK_ACCESS_TIMESTAMP) String timestamp,
+          @HeaderParam(OK_ACCESS_PASSPHRASE) String passphrase)
+          throws IOException, OkexV5Exception;
+
 
   @POST
   @Path("/v5/trade/order")
