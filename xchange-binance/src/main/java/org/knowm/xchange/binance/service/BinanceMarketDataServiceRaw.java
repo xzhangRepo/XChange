@@ -132,8 +132,4 @@ public class BinanceMarketDataServiceRaw extends BinanceBaseService {
     }
     return 1;
   }
-
-  public Map<String,Long> serverTime() throws IOException {
-    return binance.serverTimes();
-  }
 }
