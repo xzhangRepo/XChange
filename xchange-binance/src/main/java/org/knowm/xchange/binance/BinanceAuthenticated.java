@@ -524,4 +524,15 @@ public interface BinanceAuthenticated extends Binance {
   Map<?, ?> closeUserDataStream(
       @HeaderParam(X_MBX_APIKEY) String apiKey, @PathParam("listenKey") String listenKey)
       throws IOException, BinanceException;
+
+
+  @GET
+  @Path("/balance")
+  List<FutureAccountBalance> futureAccountBalance(
+          @QueryParam("recvWindow") Long recvWindow,
+          @QueryParam("timestamp") SynchronizedValueFactory<Long> timestamp,
+          @HeaderParam(X_MBX_APIKEY) String apiKey,
+          @QueryParam(SIGNATURE) ParamsDigest signature)
+          throws IOException, BinanceException;
+
 }

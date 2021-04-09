@@ -4,6 +4,7 @@ import static org.knowm.xchange.binance.BinanceResilience.REQUEST_WEIGHT_RATE_LI
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.knowm.xchange.binance.BinanceAdapters;
 import org.knowm.xchange.binance.BinanceAuthenticated;
@@ -130,5 +131,9 @@ public class BinanceMarketDataServiceRaw extends BinanceBaseService {
       return 2;
     }
     return 1;
+  }
+
+  public Map<String,Long> serverTime() throws IOException {
+    return binance.serverTimes();
   }
 }

@@ -50,6 +50,8 @@ public class BinanceAccountServiceRaw extends BinanceBaseService {
     return withdraw(asset, address, addressTag, amount, name);
   }
 
+
+
   private String withdraw(String asset, String address, BigDecimal amount, String name)
       throws IOException, BinanceException {
     WithdrawRequest result =
@@ -232,6 +234,15 @@ public class BinanceAccountServiceRaw extends BinanceBaseService {
         .withRateLimiter(rateLimiter(REQUEST_WEIGHT_RATE_LIMITER))
         .call();
   }
+
+  public List<FutureAccountBalance> getFuturreAccountBalance()
+          throws IOException, BinanceException {
+    return binance.futureAccountBalance(getRecvWindow(),
+            getTimestampFactory(),
+            super.apiKey,
+            super.signatureCreator);
+  }
+
 
   private <T> T checkWapiResponse(WapiResponse<T> result) {
     if (!result.success) {
