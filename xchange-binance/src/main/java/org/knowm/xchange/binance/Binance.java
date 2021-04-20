@@ -185,4 +185,12 @@ public interface Binance {
   @Path("dapi/v1/exchangeInfo")
   ExchangeInformation getDExchangeInfo() throws IOException, BinanceException;
 
+
+  @GET
+  @Path("/dapi/v1/ticker/price")
+  List<BinanceNewestPrice> getDContractNewestPrice(
+          @QueryParam("symbol") String symbol,
+          @QueryParam("pair")String pair)
+          throws IOException, BinanceException;
+
 }

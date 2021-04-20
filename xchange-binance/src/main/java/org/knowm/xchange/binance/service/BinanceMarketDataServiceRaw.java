@@ -116,6 +116,13 @@ public class BinanceMarketDataServiceRaw extends BinanceBaseService {
             .call();
   }
 
+  public List<BinanceNewestPrice> getDContractNewestPrice(String symbol,String pair) throws IOException {
+    return decorateApiCall(() -> binance.getDContractNewestPrice(symbol,pair))
+            .withRetry(retry("getDContractNewestPrice"))
+            .withRateLimiter(rateLimiter(REQUEST_WEIGHT_RATE_LIMITER))
+            .call();
+  }
+
   protected int depthPermits(Integer limit) {
     if (limit == null || limit <= 100) {
       return 1;
