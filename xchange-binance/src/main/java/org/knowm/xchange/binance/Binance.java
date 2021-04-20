@@ -10,11 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.knowm.xchange.binance.dto.BinanceException;
-import org.knowm.xchange.binance.dto.marketdata.BinanceAggTrades;
-import org.knowm.xchange.binance.dto.marketdata.BinanceOrderbook;
-import org.knowm.xchange.binance.dto.marketdata.BinancePrice;
-import org.knowm.xchange.binance.dto.marketdata.BinancePriceQuantity;
-import org.knowm.xchange.binance.dto.marketdata.BinanceTicker24h;
+import org.knowm.xchange.binance.dto.marketdata.*;
 import org.knowm.xchange.binance.dto.meta.BinanceSystemStatus;
 import org.knowm.xchange.binance.dto.meta.BinanceTime;
 import org.knowm.xchange.binance.dto.meta.exchangeinfo.BinanceExchangeInfo;
@@ -183,4 +179,10 @@ public interface Binance {
    * @throws BinanceException
    */
   List<BinancePriceQuantity> tickerAllBookTickers() throws IOException, BinanceException;
+
+
+  @GET
+  @Path("dapi/v1/exchangeInfo")
+  ExchangeInformation getDExchangeInfo() throws IOException, BinanceException;
+
 }
