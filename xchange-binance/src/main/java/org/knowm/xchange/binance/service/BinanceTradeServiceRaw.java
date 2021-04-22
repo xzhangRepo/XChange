@@ -11,14 +11,8 @@ import org.knowm.xchange.binance.BinanceAdapters;
 import org.knowm.xchange.binance.BinanceAuthenticated;
 import org.knowm.xchange.binance.BinanceExchange;
 import org.knowm.xchange.binance.dto.BinanceException;
-import org.knowm.xchange.binance.dto.trade.BinanceCancelledOrder;
-import org.knowm.xchange.binance.dto.trade.BinanceListenKey;
-import org.knowm.xchange.binance.dto.trade.BinanceNewOrder;
-import org.knowm.xchange.binance.dto.trade.BinanceOrder;
-import org.knowm.xchange.binance.dto.trade.BinanceTrade;
-import org.knowm.xchange.binance.dto.trade.OrderSide;
-import org.knowm.xchange.binance.dto.trade.OrderType;
-import org.knowm.xchange.binance.dto.trade.TimeInForce;
+import org.knowm.xchange.binance.dto.PositionSide;
+import org.knowm.xchange.binance.dto.trade.*;
 import org.knowm.xchange.client.ResilienceRegistries;
 import org.knowm.xchange.currency.CurrencyPair;
 
@@ -219,6 +213,35 @@ public class BinanceTradeServiceRaw extends BinanceBaseService {
     decorateApiCall(() -> binance.closeUserDataStream(apiKey, listenKey))
         .withRateLimiter(rateLimiter(REQUEST_WEIGHT_RATE_LIMITER))
         .call();
+  }
+
+  /**
+   * 交割合约下单
+   * @param symbol
+   * @param side
+   * @param positionSide
+   * @param type
+   * @param reduceOnly
+   * @param quantity
+   * @param price
+   * @return
+   * @throws IOException
+   * @throws BinanceException
+   */
+  public BinanceFutureOrder futureOrder(
+          String symbol,
+          OrderSide side,
+          PositionSide positionSide,
+          OrderType type,
+          boolean reduceOnly,
+          BigDecimal quantity,
+          BigDecimal price,
+          TimeInForce force)
+          throws IOException, BinanceException {
+   return binance.futureOrder(symbol,side,positionSide,type,reduceOnly,quantity,price,force,getRecvWindow(),
+            getTimestampFactory(),
+            apiKey,
+            signatureCreator);
   }
 
   protected int openOrdersPermits(CurrencyPair pair) {

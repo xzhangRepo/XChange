@@ -18,15 +18,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.knowm.xchange.binance.dto.BinanceException;
+import org.knowm.xchange.binance.dto.PositionSide;
 import org.knowm.xchange.binance.dto.account.*;
-import org.knowm.xchange.binance.dto.trade.BinanceCancelledOrder;
-import org.knowm.xchange.binance.dto.trade.BinanceListenKey;
-import org.knowm.xchange.binance.dto.trade.BinanceNewOrder;
-import org.knowm.xchange.binance.dto.trade.BinanceOrder;
-import org.knowm.xchange.binance.dto.trade.BinanceTrade;
-import org.knowm.xchange.binance.dto.trade.OrderSide;
-import org.knowm.xchange.binance.dto.trade.OrderType;
-import org.knowm.xchange.binance.dto.trade.TimeInForce;
+import org.knowm.xchange.binance.dto.trade.*;
 import si.mazi.rescu.ParamsDigest;
 import si.mazi.rescu.SynchronizedValueFactory;
 
@@ -549,11 +543,28 @@ public interface BinanceAuthenticated extends Binance {
   @POST
   @Path("/sapi/v1/asset/transfer")
   Map<String, String> transfer(
-          @QueryParam("type") String type,
-          @QueryParam("asset") String asset,
-          @QueryParam("amount") String amount,
-          @QueryParam("recvWindow") Long recvWindow,
-          @QueryParam("timestamp") SynchronizedValueFactory<Long> timestamp,
+          @FormParam("type") String type,
+          @FormParam("asset") String asset,
+          @FormParam("amount") String amount,
+          @FormParam("recvWindow") Long recvWindow,
+          @FormParam("timestamp") SynchronizedValueFactory<Long> timestamp,
+          @HeaderParam(X_MBX_APIKEY) String apiKey,
+          @QueryParam(SIGNATURE) ParamsDigest signature)
+          throws IOException, BinanceException;
+
+  @POST
+  @Path("/dapi/v1/order")
+  BinanceFutureOrder futureOrder(
+          @FormParam("symbol") String symbol,
+          @FormParam("side") OrderSide side,
+          @FormParam("positionSide") PositionSide positionSide,
+          @FormParam("type") OrderType type,
+          @FormParam("reduceOnly")boolean reduceOnly,
+          @FormParam("quantity") BigDecimal quantity,
+          @FormParam("price") BigDecimal price,
+          @FormParam("timeInForce")TimeInForce timeInForce,
+          @FormParam("recvWindow") Long recvWindow,
+          @FormParam("timestamp") SynchronizedValueFactory<Long> timestamp,
           @HeaderParam(X_MBX_APIKEY) String apiKey,
           @QueryParam(SIGNATURE) ParamsDigest signature)
           throws IOException, BinanceException;
