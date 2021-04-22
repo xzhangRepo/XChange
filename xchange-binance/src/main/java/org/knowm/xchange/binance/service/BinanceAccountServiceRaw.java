@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+
 import org.knowm.xchange.binance.BinanceAdapters;
 import org.knowm.xchange.binance.BinanceAuthenticated;
 import org.knowm.xchange.binance.BinanceExchange;
@@ -243,6 +245,31 @@ public class BinanceAccountServiceRaw extends BinanceBaseService {
             super.signatureCreator);
   }
 
+
+  public List<FutureAccountBalance>  getFutureAccountBalanceV1()
+          throws IOException, BinanceException {
+    return binance.futureAccountBalanceV1(getRecvWindow(),
+            getTimestampFactory(),
+            super.apiKey,
+            super.signatureCreator);
+  }
+
+  /**
+   * 万向划转
+   * @param type
+   * @param asset
+   * @param amount
+   * @return
+   * @throws IOException
+   * @throws BinanceException
+   */
+  public String transfer(String type,String asset,String amount)throws IOException, BinanceException{
+    Map<String, String> map = binance.transfer(type,asset,amount,getRecvWindow(),
+            getTimestampFactory(),
+            super.apiKey,
+            super.signatureCreator);
+    return map.get("tranId");
+  }
 
   private <T> T checkWapiResponse(WapiResponse<T> result) {
     if (!result.success) {
