@@ -63,6 +63,7 @@ import org.knowm.xchange.okcoin.v3.service.OkexException;
 import org.knowm.xchange.okcoin.v3.service.OkexV5Exception;
 import org.knowm.xchange.okcoin.v5.dto.account.AccountBalanceResult;
 import org.knowm.xchange.okcoin.v5.dto.account.AccountPositionResult;
+import org.knowm.xchange.okcoin.v5.dto.marketdata.OkexFundRateResult;
 import org.knowm.xchange.okcoin.v5.dto.marketdata.OkexInstrument;
 import org.knowm.xchange.okcoin.v5.dto.marketdata.OkexInstrumentResult;
 import org.knowm.xchange.okcoin.v5.dto.trade.OrderInfoResult;
@@ -712,6 +713,11 @@ public interface OkexV3 {
   OkexInstrumentResult getAllInstruments(
           @QueryParam("instType") String instType,
           @QueryParam("uly")String uly,
+          @QueryParam("instId")String instId) throws IOException, OkexV5Exception;
+
+  @GET
+  @Path("/v5/public/funding-rate")
+  OkexFundRateResult getFundingRateV5(
           @QueryParam("instId")String instId) throws IOException, OkexV5Exception;
 
   @GET
