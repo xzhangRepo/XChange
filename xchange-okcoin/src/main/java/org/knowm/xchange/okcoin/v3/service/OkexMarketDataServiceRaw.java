@@ -68,4 +68,15 @@ public class OkexMarketDataServiceRaw extends OkexBaseService {
   public List<OkexFundRate>  getFundRateV5(String instId) throws IOException {
     return checkResultV5(okex.getFundingRateV5(instId));
   }
+
+  /**
+   * v5 获取历史费率
+   * @param instId
+   * @param limit
+   * @return
+   * @throws IOException
+   */
+  public List<OkexFundRate>  getHistoryFundRateV5(String instId,int limit) throws IOException {
+    return checkResultV5(okex.getHistoryFundingRateV5(instId,limit));
+  }
 }

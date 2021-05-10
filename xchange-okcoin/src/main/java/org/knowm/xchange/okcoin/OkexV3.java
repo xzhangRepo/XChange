@@ -721,6 +721,13 @@ public interface OkexV3 {
           @QueryParam("instId")String instId) throws IOException, OkexV5Exception;
 
   @GET
+  @Path("/v5/public/funding-rate-history")
+  OkexFundRateResult getHistoryFundingRateV5(
+          @QueryParam("instId")String instId,
+          @QueryParam("limit")int limit) throws IOException, OkexV5Exception;
+
+
+  @GET
   @Path("/v5/account/balance")
   AccountBalanceResult getbalance(
           @QueryParam("ccy") String ccy,

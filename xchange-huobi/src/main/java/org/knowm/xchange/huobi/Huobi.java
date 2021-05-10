@@ -502,6 +502,19 @@ public interface Huobi {
           @QueryParam("contract_code") String contractCode)
           throws IOException;
 
+  @GET
+  @Path("swap-api/v1/swap_historical_funding_rate")
+  HistoricalFundingRateResult getHistoricalFundingRate(
+          @QueryParam("contract_code") String contractCode)
+          throws IOException;
+
+
+  @GET
+  @Path("linear-swap-api/v1/swap_historical_funding_rate")
+  HistoricalFundingRateResult getHistoricalLinearFundingRate(
+          @QueryParam("contract_code") String contractCode)
+          throws IOException;
+
   /**
    * 特指币本位合约
    * @param contractCode
