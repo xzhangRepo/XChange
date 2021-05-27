@@ -163,4 +163,24 @@ public class HuobiSwapPosition {
     public void setLastPrice(BigDecimal lastPrice) {
         this.lastPrice = lastPrice;
     }
+
+    @Override
+    public String toString() {
+        return "HuobiSwapPosition{" +
+                "symbol='" + symbol + '\'' +
+                ", contractCode='" + contractCode + '\'' +
+                ", volume=" + volume +
+                ", available=" + available +
+                ", frozen=" + frozen +
+                ", costOpen=" + costOpen +
+                ", costHold=" + costHold +
+                ", profitUnreal=" + profitUnreal +
+                ", profitRate=" + profitRate +
+                ", leverRate=" + leverRate +
+                ", positionMargin=" + positionMargin +
+                ", direction='" + direction + '\'' +
+                ", profit=" + profit +
+                ", lastPrice=" + lastPrice +
+                '}';
+    }
 }

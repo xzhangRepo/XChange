@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import org.knowm.xchange.binance.dto.BinanceException;
 import org.knowm.xchange.binance.dto.PositionSide;
 import org.knowm.xchange.binance.dto.account.*;
+import org.knowm.xchange.binance.dto.marketdata.BinancePriceQuantity;
 import org.knowm.xchange.binance.dto.trade.*;
 import si.mazi.rescu.ParamsDigest;
 import si.mazi.rescu.SynchronizedValueFactory;
@@ -568,4 +569,24 @@ public interface BinanceAuthenticated extends Binance {
           @HeaderParam(X_MBX_APIKEY) String apiKey,
           @QueryParam(SIGNATURE) ParamsDigest signature)
           throws IOException, BinanceException;
+
+
+  @GET
+  @Path("/sapi/v1/asset/tradeFee")
+  List<TradeFeeResponse> getSpotTradeFee(
+          @QueryParam("symbol") String symbol,
+          @QueryParam("recvWindow") Long recvWindow,
+          @QueryParam("timestamp") SynchronizedValueFactory<Long> timestamp,
+          @HeaderParam(X_MBX_APIKEY) String apiKey,
+          @QueryParam(SIGNATURE) ParamsDigest signature) throws IOException, BinanceException;
+
+  @GET
+  @Path("/dapi/v1/commissionRate")
+  List<FutureTradeFeeResponse> getFutureTradeFee(
+          @QueryParam("symbol") String symbol,
+          @QueryParam("recvWindow") Long recvWindow,
+          @QueryParam("timestamp") SynchronizedValueFactory<Long> timestamp,
+          @HeaderParam(X_MBX_APIKEY) String apiKey,
+          @QueryParam(SIGNATURE) ParamsDigest signature) throws IOException, BinanceException;
+
 }

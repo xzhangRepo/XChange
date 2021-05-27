@@ -516,7 +516,7 @@ public interface Huobi {
           throws IOException;
 
   /**
-   * 特指币本位合约
+   * 特指U本位合约逐仓
    * @param contractCode
    * @param apiKey
    * @param signatureMethod

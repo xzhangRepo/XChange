@@ -271,6 +271,29 @@ public class BinanceAccountServiceRaw extends BinanceBaseService {
     return map.get("tranId");
   }
 
+
+  public List<TradeFeeResponse>  getSpotTradeFee(String symbol)
+          throws IOException, BinanceException {
+    return binance.getSpotTradeFee(
+            symbol,
+            getRecvWindow(),
+            getTimestampFactory(),
+            super.apiKey,
+            super.signatureCreator);
+  }
+
+  public List<FutureTradeFeeResponse>  getFutureTradeFee(String symbol)
+          throws IOException, BinanceException {
+    return binance.getFutureTradeFee(
+            symbol,
+            getRecvWindow(),
+            getTimestampFactory(),
+            super.apiKey,
+            super.signatureCreator);
+  }
+
+
+
   private <T> T checkWapiResponse(WapiResponse<T> result) {
     if (!result.success) {
       BinanceException exception;
