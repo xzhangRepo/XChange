@@ -245,6 +245,23 @@ public class BinanceAccountServiceRaw extends BinanceBaseService {
             super.signatureCreator);
   }
 
+  public AccountInfo getFutureAccount()
+          throws IOException, BinanceException {
+    return binance.getFutureAccount(getRecvWindow(),
+            getTimestampFactory(),
+            super.apiKey,
+            super.signatureCreator);
+  }
+
+
+  public List<PositionRiskInfo> getFuturePositionRiskInfo()
+          throws IOException, BinanceException {
+    return binance.getFuturePositionRisk(getRecvWindow(),
+            getTimestampFactory(),
+            super.apiKey,
+            super.signatureCreator);
+  }
+
 
   public List<FutureAccountBalance>  getFutureAccountBalanceV1()
           throws IOException, BinanceException {
