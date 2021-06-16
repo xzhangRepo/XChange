@@ -1,10 +1,12 @@
 package org.knowm.xchange.huobi.dto.marketdata;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public final class HuobiTicker {
+
 
   private final long id;
   private final BigDecimal amount;
@@ -88,6 +90,7 @@ public final class HuobiTicker {
   public void setTs(Date ts) {
     this.ts = ts;
   }
+
 
   @Override
   public String toString() {

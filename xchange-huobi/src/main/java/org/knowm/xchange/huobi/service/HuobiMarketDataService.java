@@ -2,20 +2,22 @@ package org.knowm.xchange.huobi.service;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order.OrderType;
-import org.knowm.xchange.dto.marketdata.OrderBook;
-import org.knowm.xchange.dto.marketdata.Ticker;
-import org.knowm.xchange.dto.marketdata.Trade;
-import org.knowm.xchange.dto.marketdata.Trades;
+import org.knowm.xchange.dto.marketdata.*;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiAdapters;
+import org.knowm.xchange.huobi.HuobiUtils;
 import org.knowm.xchange.huobi.dto.marketdata.HuobiDepth;
+import org.knowm.xchange.huobi.dto.marketdata.HuobiKLine;
+import org.knowm.xchange.huobi.dto.marketdata.HuobiTicker;
 import org.knowm.xchange.huobi.dto.marketdata.HuobiTradeWrapper;
+import org.knowm.xchange.huobi.dto.marketdata.results.HuobiKLineResult;
 import org.knowm.xchange.service.marketdata.MarketDataService;
 import org.knowm.xchange.service.marketdata.params.Params;
 
@@ -96,5 +98,15 @@ public class HuobiMarketDataService extends HuobiMarketDataServiceRaw implements
             .collect(Collectors.toList());
 
     return new Trades(trades);
+  }
+
+
+  public List<Kline> getKlines(CurrencyPair pair, KlineInterval interval) throws IOException{
+    String huobiCurrencyPair = HuobiUtils.createHuobiCurrencyPair(pair);
+    HuobiKLineResult huobiKLineResult = huobi.getKLine(huobiCurrencyPair, org.knowm.xchange.huobi.dto.marketdata.KlineInterval.getEnumByCode(interval.code()).getHuobiCode(),"300");
+    List<HuobiKLine> huobiTickers= huobiKLineResult.getResult();
+    huobiTickers.forEach(huobiSpotKLine -> {huobiSpotKLine.setInstrumentId(HuobiUtils.toSpotInstrument(pair));});
+    Collections.reverse(huobiTickers);
+    return HuobiAdapters.adaptKline(huobiTickers);
   }
 }

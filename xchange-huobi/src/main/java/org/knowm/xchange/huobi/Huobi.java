@@ -29,6 +29,11 @@ public interface Huobi {
       throws IOException;
 
   @GET
+  @Path("market/history/kline")
+  HuobiKLineResult getKLine(@QueryParam("symbol") String symbol, @QueryParam("period") String period,@QueryParam("size") String size)
+          throws IOException;
+
+  @GET
   @Path("market/history/trade")
   HuobiTradesResult getTrades(@QueryParam("symbol") String symbol, @QueryParam("size") int size)
       throws IOException;

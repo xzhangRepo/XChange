@@ -590,6 +590,15 @@ public interface BinanceAuthenticated extends Binance {
           @QueryParam(SIGNATURE) ParamsDigest signature) throws IOException, BinanceException;
 
   @GET
+  @Path("/dapi/v1/commissionRate")
+  FutureTradeFeeResponse getSingleFutureTradeFee(
+          @QueryParam("symbol") String symbol,
+          @QueryParam("recvWindow") Long recvWindow,
+          @QueryParam("timestamp") SynchronizedValueFactory<Long> timestamp,
+          @HeaderParam(X_MBX_APIKEY) String apiKey,
+          @QueryParam(SIGNATURE) ParamsDigest signature) throws IOException, BinanceException;
+
+  @GET
   @Path("/dapi/v1/account")
   AccountInfo getFutureAccount(
           @QueryParam("recvWindow") Long recvWindow,

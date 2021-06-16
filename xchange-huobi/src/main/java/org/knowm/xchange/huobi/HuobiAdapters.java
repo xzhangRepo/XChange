@@ -13,6 +13,7 @@ import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.dto.account.FundingRecord.Status;
 import org.knowm.xchange.dto.account.Wallet;
+import org.knowm.xchange.dto.marketdata.Kline;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
 import org.knowm.xchange.dto.meta.CurrencyMetaData;
@@ -30,10 +31,7 @@ import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.dto.account.HuobiBalanceRecord;
 import org.knowm.xchange.huobi.dto.account.HuobiBalanceSum;
 import org.knowm.xchange.huobi.dto.account.HuobiFundingRecord;
-import org.knowm.xchange.huobi.dto.marketdata.HuobiAllTicker;
-import org.knowm.xchange.huobi.dto.marketdata.HuobiAsset;
-import org.knowm.xchange.huobi.dto.marketdata.HuobiAssetPair;
-import org.knowm.xchange.huobi.dto.marketdata.HuobiTicker;
+import org.knowm.xchange.huobi.dto.marketdata.*;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
 
 public class HuobiAdapters {
@@ -406,4 +404,40 @@ public class HuobiAdapters {
         return null;
     }
   }
+
+  public static List<Kline> adaptKline(List<HuobiKLine> huobiKLine) {
+    return huobiKLine.stream()
+            .map(HuobiAdapters::adaptKline)
+            .collect(Collectors.toList());
+  }
+
+  private static Kline adaptKline(HuobiKLine huobiTicker) {
+    return new Kline.Builder()
+            .currencyPair(toPair(huobiTicker.getInstrumentId()))
+            .openTime(huobiTicker.getId())
+            .high(huobiTicker.getHigh())
+            .open(huobiTicker.getOpen())
+            .close(huobiTicker.getClose())
+            .low(huobiTicker.getLow())
+            .volume(huobiTicker.getAmount())
+            .closeTime(huobiTicker.getId())
+            .build();
+  }
+
+
+  /**
+   * there are different types of instruments: spot (ie 'ETH-BTC'), future (ie 'BCH-USD-190927'),
+   * swap (ie 'ETH-USD-SWAP')
+   *
+   * @param instrument
+   * @return
+   */
+  public static CurrencyPair toPair(String instrument) {
+    String[] split = instrument.split("-");
+    if (split == null || split.length < 2) {
+      throw new ExchangeException("Not supported instrument: " + instrument);
+    }
+    return new CurrencyPair(split[0], split[1]);
+  }
+
 }

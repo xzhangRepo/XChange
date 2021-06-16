@@ -309,6 +309,16 @@ public class BinanceAccountServiceRaw extends BinanceBaseService {
             super.signatureCreator);
   }
 
+  public FutureTradeFeeResponse  getSingleFutureTradeFee(String symbol)
+          throws IOException, BinanceException {
+    return binance.getSingleFutureTradeFee(
+            symbol,
+            getRecvWindow(),
+            getTimestampFactory(),
+            super.apiKey,
+            super.signatureCreator);
+  }
+
 
 
   private <T> T checkWapiResponse(WapiResponse<T> result) {

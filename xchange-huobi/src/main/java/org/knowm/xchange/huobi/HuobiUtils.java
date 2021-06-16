@@ -35,6 +35,10 @@ public class HuobiUtils {
     return pair;
   }
 
+  public static String toSpotInstrument(CurrencyPair pair) {
+    return pair == null ? null : pair.base.getCurrencyCode() + "-" + pair.counter.getCurrencyCode();
+  }
+
   public static String createUTCDate(SynchronizedValueFactory<Long> nonce) {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
